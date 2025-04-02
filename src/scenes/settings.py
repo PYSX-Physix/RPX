@@ -1,6 +1,8 @@
 import pyglet
 import os
 import sys
+from utils.helpers import load_sound
+
 
 class SettingsScene:
     def __init__(self, game):
@@ -115,6 +117,11 @@ class SettingsScene:
         self.restart_notice.draw()  # Draw the restart notice
 
     def on_mouse_press(self, x, y, button, modifiers):
+        
+
+        button_click_Sound = load_sound("src/assets/button_click.wav")
+        button_click_Sound.play()
+        
         # Check if the lighting button is clicked
         if (
             self.lighting_button.x <= x <= self.lighting_button.x + self.lighting_button.width
