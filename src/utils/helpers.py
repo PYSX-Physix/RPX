@@ -5,7 +5,7 @@ basepath = getattr(sys, '_MEIPASS', os.path.dirname(os.path.dirname(os.path.absp
 print(f"Base path: {basepath}")
 imagepath = os.path.join(basepath, "assets", "images")
 soundpath = os.path.join(basepath, "assets", "sounds")
-
+characterpath = os.path.join(basepath, "assets", "characters")
 
 def load_image(file_path):
     from pyglet import image

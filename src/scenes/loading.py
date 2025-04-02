@@ -1,6 +1,7 @@
 import pyglet
 from classes.CollidableAsset import CollidableAssetClass as CollidableAsset
 from classes.WalkThroughAsset import NonCollidableAsset
+from utils.helpers import characterpath, imagepath
 
 
 class LoadingScene:
@@ -31,16 +32,16 @@ class LoadingScene:
     def load_assets(self):
         # Load player GIF
         self.player_animations = {
-            "idle_right": pyglet.image.load_animation("src/assets/characters/dev_default/idle-right.gif"),
-            "idle_left": pyglet.image.load_animation("src/assets/characters/dev_default/idle-left.gif"),
-            "left": pyglet.image.load_animation("src/assets/characters/dev_default/move_left.gif"),
-            "right": pyglet.image.load_animation("src/assets/characters/dev_default/move_right.gif"),
-            "up": pyglet.image.load_animation("src/assets/characters/dev_default/move_up.gif"),
-            "down": pyglet.image.load_animation("src/assets/characters/dev_default/move_down.gif"),
+            "idle_right": pyglet.image.load_animation(f"{characterpath}/dev_default/idle-right.gif"),
+            "idle_left": pyglet.image.load_animation(f"{characterpath}/dev_default/idle-left.gif"),
+            "left": pyglet.image.load_animation(f"{characterpath}/dev_default/move_left.gif"),
+            "right": pyglet.image.load_animation(f"{characterpath}/dev_default/move_right.gif"),
+            "up": pyglet.image.load_animation(f"{characterpath}/dev_default/move_up.gif"),
+            "down": pyglet.image.load_animation(f"{characterpath}/dev_default/move_down.gif"),
         }
         print(f"Log: Character: Animations: Loaded default animations {self.player_animations}")
 
-        player_image = pyglet.image.load_animation("src/assets/characters/dev_default/dev_default.gif")
+        player_image = pyglet.image.load_animation(f"{characterpath}/dev_default/dev_default.gif")
         self.player = pyglet.sprite.Sprite(self.player_animations["idle_right"], x=100, y=100)  # Initial position
         print(f"Log: GameScene: Player.Sprite: Loaded player with animation state {self.player_animations['idle_right']} and spawned at {self.player.x} {self.player.y}")
 
@@ -48,13 +49,13 @@ class LoadingScene:
         
         # Load collidable assets with images
         self.collidable_assets = [
-            CollidableAsset(400, 200, 20, 20, image_path="src/assets/images/bush.png"),
+            CollidableAsset(400, 200, 20, 20, 2.0, image_path=f"{imagepath}/bush.png"),
         ]
         print(f"Log: Collidable assets loaded: {len(self.collidable_assets)}")
 
         # Load non-collidable assets
         self.non_collidable_assets = [
-            NonCollidableAsset(100, 100, "src/assets/images/grass.png"),
+            NonCollidableAsset(100, 100, f"{imagepath}/grass.png", 2.0),
         ]
         print(f"Log: Non-collidable assets loaded: {len(self.non_collidable_assets)}")
 
