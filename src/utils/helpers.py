@@ -3,10 +3,10 @@ def load_image(file_path):
     print(f"Loaded images at {file_path}")
     return image.load(file_path)
 
-def load_sound(file_path, streaming: bool):
+def load_sound(file_path):
     from pyglet import media
-    print(f"Loaded sound at {file_path} and streaming is set to {streaming}")
-    return media.load(file_path, streaming)
+    print(f"Loaded sound at {file_path}")
+    return media.load(file_path, streaming=False)
 
 def load_animation(frames, duration):
     from pyglet import sprite

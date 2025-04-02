@@ -70,7 +70,7 @@ class MenuScene:
                 button_shape.x <= x <= button_shape.x + button_shape.width
                 and button_shape.y <= y <= button_shape.y + button_shape.height
             ):
-                button_click = load_sound("src/assets/sounds/button_click.wav", False)
+                button_click = load_sound("src/assets/sounds/button_click.wav")
                 button_click.play()
                 button_data["action"]()  # Call the button's action
 
