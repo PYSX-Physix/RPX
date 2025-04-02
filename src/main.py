@@ -6,7 +6,7 @@ from scenes.settings import SettingsScene
 
 class Game:
     def __init__(self):
-        self.window = pyglet.window.Window(width=1920, height=1080, caption="RPX Game")
+        self.window = pyglet.window.Window(width=1920, height=1080, caption="RPX Game") # Game window
         self.settings_file = "settings.json"
         self.dynamic_lighting = True  # Default setting
         self.resolution = (1920, 1080)  # Default resolution
