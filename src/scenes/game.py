@@ -15,6 +15,7 @@ class GameScene:
             "up": False,
             "down": False,
         }
+        self.last_direction = "right"  # Default direction
 
     def setup(self):
         self.initialize_player()
@@ -72,29 +73,41 @@ class GameScene:
             self.update_game_logic()
 
     def update_game_logic(self):
-        # Determine the direction of movement
+        # Move left
         if self.keys["left"]:
             if self.player.image != self.player_animations["left"]:
                 self.player.image = self.player_animations["left"]
                 self.player._animation = self.player_animations["left"]  # Reset animation
             self.player.x -= 200 * 0.016  # Move left
-        elif self.keys["right"]:
+            self.last_direction = "left"  # Update last direction
+
+        # Move right
+        if self.keys["right"]:
             if self.player.image != self.player_animations["right"]:
                 self.player.image = self.player_animations["right"]
                 self.player._animation = self.player_animations["right"]  # Reset animation
             self.player.x += 200 * 0.016  # Move right
-        elif self.keys["up"]:
+            self.last_direction = "right"  # Update last direction
+
+        # Move up
+        if self.keys["up"]:
             if self.player.image != self.player_animations["up"]:
                 self.player.image = self.player_animations["up"]
                 self.player._animation = self.player_animations["up"]  # Reset animation
             self.player.y += 200 * 0.016  # Move up
-        elif self.keys["down"]:
+
+        # Move down
+        if self.keys["down"]:
             if self.player.image != self.player_animations["down"]:
                 self.player.image = self.player_animations["down"]
                 self.player._animation = self.player_animations["down"]  # Reset animation
             self.player.y -= 200 * 0.016  # Move down
-        else:
-            # If no keys are pressed, set the animation to idle
-            if self.player.image != self.player_animations["idle"]:
-                self.player.image = self.player_animations["idle"]
-                self.player._animation = self.player_animations["idle"]  # Reset animation
+
+        # If no keys are pressed, set the idle animation based on the last direction
+        if not (self.keys["left"] or self.keys["right"] or self.keys["up"] or self.keys["down"]):
+            if self.last_direction == "left" and self.player.image != self.player_animations["idle_left"]:
+                self.player.image = self.player_animations["idle_left"]
+                self.player._animation = self.player_animations["idle_left"]  # Reset animation
+            elif self.last_direction == "right" and self.player.image != self.player_animations["idle_right"]:
+                self.player.image = self.player_animations["idle_right"]
+                self.player._animation = self.player_animations["idle_right"]  # Reset animation
