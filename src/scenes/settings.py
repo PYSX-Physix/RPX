@@ -57,24 +57,6 @@ class SettingsScene:
             anchor_y="center",
         )
 
-        # Apply button
-        self.apply_button = pyglet.shapes.Rectangle(
-            x=self.game.window.width // 2 - 100,
-            y=180,
-            width=200,
-            height=40,
-            color=(50, 200, 50),
-        )
-        self.apply_label = pyglet.text.Label(
-            "Apply",
-            font_name="Arial",
-            font_size=16,
-            x=self.game.window.width // 2,
-            y=200,
-            anchor_x="center",
-            anchor_y="center",
-        )
-
         # Back button
         self.back_button = pyglet.shapes.Rectangle(
             x=self.game.window.width // 2 - 100,
@@ -136,13 +118,6 @@ class SettingsScene:
         ):
             self.cycle_resolution()
 
-        # Check if the apply button is clicked
-        if (
-            self.apply_button.x <= x <= self.apply_button.x + self.apply_button.width
-            and self.apply_button.y <= y <= self.apply_button.y + self.apply_button.height
-        ):
-            self.apply_changes()
-
         # Check if the back button is clicked
         if (
             self.back_button.x <= x <= self.back_button.x + self.back_button.width
@@ -161,11 +136,6 @@ class SettingsScene:
         selected_resolution = self.resolutions[self.selected_resolution_index]
         self.resolution_label.text = f"Resolution: {selected_resolution[0]}x{selected_resolution[1]}"
         self.game.resolution = selected_resolution
-
-    def apply_changes(self):
-        # Save settings and restart the game
-        self.game.save_settings()
-        os.execv(sys.executable, [sys.executable] + sys.argv)
 
     def update(self, dt):
         # Placeholder for any updates in the settings scene
