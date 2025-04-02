@@ -80,9 +80,7 @@ class MenuScene:
         # Add logic to switch to the game scene
 
     def show_options(self):
-        print("Options clicked!")
         self.game.switch_scene(self.game.settings_scene)  # Switch to the settings scene
 
     def exit_game(self):
-        print("Exit clicked!")
         pyglet.app.exit()
