@@ -12,7 +12,7 @@ class MenuScene:
 
         # Title label
         self.title_label = pyglet.text.Label(
-            "Welcome to the RPG Game!",
+            "RPX Game",
             font_name="Arial",
             font_size=24,
             x=self.game.window.width // 2,
