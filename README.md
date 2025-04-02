@@ -16,7 +16,7 @@ rpg-game
 │   │   ├── menu.py            # Main menu scene
 │   │   ├── game.py            # Main gameplay scene
 │   │   ├── game_over.py       # Game over scene
-|   |   └── settings.py
+|   |   └── settings.py        # Settings scene
 │   └── utils                  # Utility functions
 │       └── helpers.py         # Helper functions for asset management
 ├── requirements.txt           # Project dependencies
