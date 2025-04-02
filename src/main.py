@@ -6,12 +6,16 @@ from scenes.settings import SettingsScene
 
 class Game:
     def __init__(self):
-        self.window = pyglet.window.Window(width=800, height=600, caption="RPG Game")
+        self.window = pyglet.window.Window(width=1920, height=1080, caption="RPG Game")
         self.settings_file = "settings.json"
         self.dynamic_lighting = True  # Default setting
+        self.resolution = (1920, 1080)  # Default resolution
 
         # Load settings from file
         self.load_settings()
+
+        # Apply the loaded resolution
+        self.window.set_size(*self.resolution)
 
         self.menu_scene = MenuScene(self)
         self.settings_scene = SettingsScene(self)
@@ -36,7 +40,10 @@ class Game:
 
     def save_settings(self):
         # Save settings to a JSON file
-        settings = {"dynamic_lighting": self.dynamic_lighting}
+        settings = {
+            "dynamic_lighting": self.dynamic_lighting,
+            "resolution": self.resolution,
+        }
         with open(self.settings_file, "w") as f:
             json.dump(settings, f)
 
@@ -46,6 +53,7 @@ class Game:
             with open(self.settings_file, "r") as f:
                 settings = json.load(f)
                 self.dynamic_lighting = settings.get("dynamic_lighting", True)
+                self.resolution = tuple(settings.get("resolution", (800, 600)))
 
 if __name__ == "__main__":
     game = Game()
