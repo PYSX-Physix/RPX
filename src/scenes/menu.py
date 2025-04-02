@@ -1,14 +1,18 @@
 import pyglet
 from scenes.settings import SettingsScene  # Import the SettingsScene class
+from utils.helpers import load_image, load_sound  # Import the load_image function
 
 
 class MenuScene:
     def __init__(self, game):
         self.game = game  # Store the reference to the Game instance
 
+        self.background_image = load_image("src/assets/images/background.png")
+        self.background_sprite = pyglet.sprite.Sprite(self.background_image, x=0, y=0)
+
         # Title label
         self.title_label = pyglet.text.Label(
-            "Welcome to the RPG Game!",
+            "RPX Game",
             font_name="Arial",
             font_size=24,
             x=self.game.window.width // 2,
@@ -48,6 +52,7 @@ class MenuScene:
     def on_draw(self):
         # Clear the window and draw the title and buttons
         self.game.window.clear()
+        self.background_sprite.draw()
         self.title_label.draw()
 
         for button_shape, button_label in zip(self.button_shapes, self.button_labels):
@@ -65,6 +70,8 @@ class MenuScene:
                 button_shape.x <= x <= button_shape.x + button_shape.width
                 and button_shape.y <= y <= button_shape.y + button_shape.height
             ):
+                button_click = load_sound("src/assets/sounds/button_click.wav")
+                button_click.play()
                 button_data["action"]()  # Call the button's action
 
     # Button actions
@@ -73,9 +80,7 @@ class MenuScene:
         # Add logic to switch to the game scene
 
     def show_options(self):
-        print("Options clicked!")
         self.game.switch_scene(self.game.settings_scene)  # Switch to the settings scene
 
     def exit_game(self):
-        print("Exit clicked!")
         pyglet.app.exit()
