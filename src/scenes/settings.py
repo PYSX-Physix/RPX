@@ -101,7 +101,7 @@ class SettingsScene:
     def on_mouse_press(self, x, y, button, modifiers):
         
 
-        button_click_Sound = load_sound("src/assets/button_click.wav")
+        button_click_Sound = load_sound("src/assets/sounds/button_click.wav")
         button_click_Sound.play()
         
         # Check if the lighting button is clicked

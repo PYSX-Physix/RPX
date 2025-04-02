@@ -7,6 +7,9 @@ class MenuScene:
     def __init__(self, game):
         self.game = game  # Store the reference to the Game instance
 
+        self.background_image = load_image("src/assets/images/background.png")
+        self.background_sprite = pyglet.sprite.Sprite(self.background_image, x=0, y=0)
+
         # Title label
         self.title_label = pyglet.text.Label(
             "Welcome to the RPG Game!",
@@ -49,6 +52,7 @@ class MenuScene:
     def on_draw(self):
         # Clear the window and draw the title and buttons
         self.game.window.clear()
+        self.background_sprite.draw()
         self.title_label.draw()
 
         for button_shape, button_label in zip(self.button_shapes, self.button_labels):
@@ -66,7 +70,7 @@ class MenuScene:
                 button_shape.x <= x <= button_shape.x + button_shape.width
                 and button_shape.y <= y <= button_shape.y + button_shape.height
             ):
-                button_click = load_sound("src/assets/button_click.wav")
+                button_click = load_sound("src/assets/sounds/button_click.wav")
                 button_click.play()
                 button_data["action"]()  # Call the button's action
 

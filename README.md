@@ -1,7 +1,7 @@
-# RPG Game Documentation
+# RPX Game Engine Documentation
 
 ## Overview
-This RPG game is built using PyGlet, a Python library for creating games and multimedia applications. The game features various scenes, character interactions, and immersive environments.
+This RPX Game Engine is built using PyGlet, a Python library for creating games and multimedia applications. The game engine features various scenes, character interactions, and immersive environments.
 
 ## Project Structure
 ```
@@ -15,7 +15,8 @@ rpg-game
 │   ├── scenes                 # Game scenes
 │   │   ├── menu.py            # Main menu scene
 │   │   ├── game.py            # Main gameplay scene
-│   │   └── game_over.py       # Game over scene
+│   │   ├── game_over.py       # Game over scene
+|   |   └── settings.py
 │   └── utils                  # Utility functions
 │       └── helpers.py         # Helper functions for asset management
 ├── requirements.txt           # Project dependencies
@@ -27,7 +28,7 @@ rpg-game
 1. Clone the repository:
    ```
    git clone <repository-url>
-   cd rpg-game
+   cd RPX
    ```
 
 2. Install the required dependencies:
