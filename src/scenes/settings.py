@@ -1,12 +1,14 @@
 import pyglet
 import os
 import sys
-from utils.helpers import load_sound
+from utils.helpers import load_sound, load_image
 
 
 class SettingsScene:
     def __init__(self, game):
         self.game = game  # Reference to the Game instance
+        self.background_image = load_image("src/assets/images/background.png")
+        self.background_sprite = pyglet.sprite.Sprite(self.background_image, x=0, y=0)
 
         # Title label
         self.title_label = pyglet.text.Label(
@@ -89,6 +91,7 @@ class SettingsScene:
     def on_draw(self):
         # Clear the window and draw the settings menu
         self.game.window.clear()
+        self.background_sprite.draw()
         self.title_label.draw()
         self.lighting_button.draw()
         self.lighting_label.draw()
