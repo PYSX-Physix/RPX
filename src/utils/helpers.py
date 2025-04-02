@@ -1,3 +1,12 @@
+import os
+import sys
+
+basepath = getattr(sys, '_MEIPASS', os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+print(f"Base path: {basepath}")
+imagepath = os.path.join(basepath, "assets", "images")
+soundpath = os.path.join(basepath, "assets", "sounds")
+
+
 def load_image(file_path):
     from pyglet import image
     print(f"Loaded images at {file_path}")

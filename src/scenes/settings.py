@@ -1,13 +1,18 @@
 import pyglet
 import os
 import sys
-from utils.helpers import load_sound, load_image
+from utils.helpers import load_sound, load_image, imagepath, soundpath
 
+
+button_click_sound_path = os.path.join(soundpath, "button_click.wav")
+button_click_Sound = load_sound(button_click_sound_path)
 
 class SettingsScene:
+
     def __init__(self, game):
         self.game = game  # Reference to the Game instance
-        self.background_image = load_image("src/assets/images/background.png")
+        background_image_path = os.path.join(imagepath, "background.png")
+        self.background_image = load_image(background_image_path)
         self.background_sprite = pyglet.sprite.Sprite(self.background_image, x=0, y=0)
 
         # Title label
@@ -102,9 +107,8 @@ class SettingsScene:
         self.restart_notice.draw()  # Draw the restart notice
 
     def on_mouse_press(self, x, y, button, modifiers):
+        # Load the button click sound
         
-
-        button_click_Sound = load_sound("src/assets/sounds/button_click.wav")
         button_click_Sound.play()
         
         # Check if the lighting button is clicked

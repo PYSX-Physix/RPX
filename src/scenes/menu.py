@@ -1,13 +1,17 @@
+import os
 import pyglet
 from scenes.settings import SettingsScene  # Import the SettingsScene class
-from utils.helpers import load_image, load_sound  # Import the load_image function
+from utils.helpers import load_image, load_sound, imagepath, soundpath  # Import the load_image function
 
+
+button_click_sound = os.path.join(soundpath, "button_click.wav")
+button_click = load_sound(button_click_sound)
 
 class MenuScene:
     def __init__(self, game):
         self.game = game  # Store the reference to the Game instance
-
-        self.background_image = load_image("src/assets/images/background.png")
+        background_image_path = os.path.join(imagepath, "background.png")
+        self.background_image = load_image(background_image_path)
         self.background_sprite = pyglet.sprite.Sprite(self.background_image, x=0, y=0)
 
         # Title label
@@ -70,7 +74,6 @@ class MenuScene:
                 button_shape.x <= x <= button_shape.x + button_shape.width
                 and button_shape.y <= y <= button_shape.y + button_shape.height
             ):
-                button_click = load_sound("src/assets/sounds/button_click.wav")
                 button_click.play()
                 button_data["action"]()  # Call the button's action
 
