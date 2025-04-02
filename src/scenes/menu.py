@@ -76,7 +76,6 @@ class MenuScene:
 
     # Button actions
     def start_game(self):
-        print("Start Game clicked!")
         from scenes.loading import LoadingScene
         self.game.switch_scene(LoadingScene(self.game))  # Switch to the loading scene
         # Add logic to switch to the game scene
