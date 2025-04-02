@@ -6,7 +6,7 @@ from scenes.settings import SettingsScene
 
 class Game:
     def __init__(self):
-        self.window = pyglet.window.Window(width=1920, height=1080, caption="RPX Engine")
+        self.window = pyglet.window.Window(width=1920, height=1080, caption="RPX Game")
         self.settings_file = "settings.json"
         self.dynamic_lighting = True  # Default setting
         self.resolution = (1920, 1080)  # Default resolution
@@ -29,6 +29,16 @@ class Game:
         def on_mouse_press(x, y, button, modifiers):
             if hasattr(self.current_scene, "on_mouse_press"):
                 self.current_scene.on_mouse_press(x, y, button, modifiers)
+
+        @self.window.event
+        def on_key_press(symbol, modifiers):
+            if hasattr(self.current_scene, "on_key_press"):
+                self.current_scene.on_key_press(symbol, modifiers)
+
+        @self.window.event
+        def on_key_release(symbol, modifiers):
+            if hasattr(self.current_scene, "on_key_release"):
+                self.current_scene.on_key_release(symbol, modifiers)
 
         pyglet.clock.schedule_interval(self.update, 1 / 60.0)
 
