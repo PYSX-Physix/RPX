@@ -1,4 +1,7 @@
 import pyglet
+from classes.CollidableAsset import CollidableAssetClass as CollidableAsset
+from classes.WalkThroughAsset import NonCollidableAsset
+
 
 class LoadingScene:
     def __init__(self, game):
@@ -39,12 +42,21 @@ class LoadingScene:
 
         player_image = pyglet.image.load_animation("src/assets/characters/dev_default/dev_default.gif")
         self.player = pyglet.sprite.Sprite(self.player_animations["idle_right"], x=100, y=100)  # Initial position
-        print(f"Log: GameScene: Player.Sprite: Loaded player with animation state {self.player_animations["idle_right"]} and spawned at {self.player.x} {self.player.y}")
+        print(f"Log: GameScene: Player.Sprite: Loaded player with animation state {self.player_animations['idle_right']} and spawned at {self.player.x} {self.player.y}")
 
         # Load enemies
-        for i in range(5):  # Example: Load 5 enemies
-            enemy = self.create_enemy(x=i * 100, y=200)
-            self.enemies.append(enemy)
+        
+        # Load collidable assets with images
+        self.collidable_assets = [
+            CollidableAsset(400, 200, 20, 20, image_path="src/assets/images/bush.png"),
+        ]
+        print(f"Log: Collidable assets loaded: {len(self.collidable_assets)}")
+
+        # Load non-collidable assets
+        self.non_collidable_assets = [
+            NonCollidableAsset(100, 100, "src/assets/images/grass.png"),
+        ]
+        print(f"Log: Non-collidable assets loaded: {len(self.non_collidable_assets)}")
 
         # Load sounds
         print("There are no sounds loading because there are none.")  # Placeholder for sound loading
@@ -55,12 +67,15 @@ class LoadingScene:
 
     def finish_loading(self):
         from scenes.game import GameScene
-        # Pass the player, enemies, and sounds to the GameScene
+        # Pass assets to the GameScene
         game_scene = GameScene(
             self.game, 
             player=self.player,
             player_animations=self.player_animations, 
             enemies=self.enemies, 
-            sounds=self.sounds)
+            sounds=self.sounds,
+            collidable_assets=self.collidable_assets,
+            non_collidable_assets=self.non_collidable_assets
+            )
         self.game.switch_scene(game_scene)
         print(f"Log: Scene: Switched scene to {game_scene}")

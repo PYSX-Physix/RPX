@@ -1,7 +1,7 @@
 import pyglet
 
 class GameScene:
-    def __init__(self, game, player=None, player_animations=None, enemies=None, sounds=None):
+    def __init__(self, game, player=None, player_animations=None, enemies=None, sounds=None, collidable_assets=None, non_collidable_assets=None):
         self.game = game
         self.player = player  # Player sprite
         self.player_animations = player_animations  # Animations for the player
@@ -9,13 +9,44 @@ class GameScene:
         self.sounds = sounds if sounds else {}  # Use preloaded sounds
         self.score = 0
         self.is_running = True
+        self.paused = False  # Track whether the game is paused
         self.keys = {  # Track key states
             "left": False,
             "right": False,
             "up": False,
             "down": False,
         }
+        self.collidable_assets = collidable_assets if collidable_assets else []  # List of collidable assets
+        self.non_collidable_assets = non_collidable_assets if non_collidable_assets else []  # List of non-collidable assets
         self.last_direction = "right"  # Default direction
+
+        # Pause menu buttons
+        self.pause_menu_buttons = [
+            {"label": "Resume", "x": self.game.window.width // 2, "y": 300, "action": self.resume_game},
+            {"label": "Restart", "x": self.game.window.width // 2, "y": 250, "action": self.restart_game},
+            {"label": "Quit", "x": self.game.window.width // 2, "y": 200, "action": self.quit_game},
+        ]
+        self.pause_menu_shapes = []
+        self.pause_menu_labels = []
+
+        for button in self.pause_menu_buttons:
+            # Create button background
+            button_shape = pyglet.shapes.Rectangle(
+                x=button["x"] - 100, y=button["y"] - 20, width=200, height=40, color=(50, 50, 200)
+            )
+            self.pause_menu_shapes.append(button_shape)
+
+            # Create button label
+            button_label = pyglet.text.Label(
+                button["label"],
+                font_name="Arial",
+                font_size=16,
+                x=button["x"],
+                y=button["y"],
+                anchor_x="center",
+                anchor_y="center",
+            )
+            self.pause_menu_labels.append(button_label)
 
     def setup(self):
         self.initialize_player()
@@ -32,36 +63,61 @@ class GameScene:
 
         # Draw the enemies
         for enemy in self.enemies:
-            enemy.draw()  # Assuming enemies have a `draw` method
+            enemy.draw()
+
+        # Draw the collidable assets
+        for asset in self.collidable_assets:
+            asset.draw()
+
+        # Draw the non-collidable assets
+        for asset in self.non_collidable_assets:
+            asset.draw()
 
     def on_draw(self):
         self.game.window.clear()
-        self.draw()
+        if self.paused:
+            # Draw the pause menu
+            for button_shape, button_label in zip(self.pause_menu_shapes, self.pause_menu_labels):
+                button_shape.draw()
+                button_label.draw()
+        else:
+            # Draw the game elements
+            self.draw()
 
     def on_key_press(self, symbol, modifiers):
-        # Update key states
-        if symbol == pyglet.window.key.LEFT:
-            self.keys["left"] = True
-        elif symbol == pyglet.window.key.RIGHT:
-            self.keys["right"] = True
-        elif symbol == pyglet.window.key.UP:
-            self.keys["up"] = True
-        elif symbol == pyglet.window.key.DOWN:
-            self.keys["down"] = True
-        elif symbol == pyglet.window.key.SPACE:
-            if "player_jump" in self.sounds:
-                self.sounds["player_jump"].play()  # Play jump sound
+        if symbol == pyglet.window.key.SPACE:
+            # Override the default quit behavior and toggle the pause menu
+            self.paused = not self.paused  # Toggle the paused state
+        elif not self.paused:  # Only handle movement keys if the game is not paused
+            if symbol == pyglet.window.key.LEFT:
+                self.keys["left"] = True
+            elif symbol == pyglet.window.key.RIGHT:
+                self.keys["right"] = True
+            elif symbol == pyglet.window.key.UP:
+                self.keys["up"] = True
+            elif symbol == pyglet.window.key.DOWN:
+                self.keys["down"] = True
 
     def on_key_release(self, symbol, modifiers):
-        # Update key states
-        if symbol == pyglet.window.key.LEFT:
-            self.keys["left"] = False
-        elif symbol == pyglet.window.key.RIGHT:
-            self.keys["right"] = False
-        elif symbol == pyglet.window.key.UP:
-            self.keys["up"] = False
-        elif symbol == pyglet.window.key.DOWN:
-            self.keys["down"] = False
+        if not self.paused:  # Only handle key releases if the game is not paused
+            if symbol == pyglet.window.key.LEFT:
+                self.keys["left"] = False
+            elif symbol == pyglet.window.key.RIGHT:
+                self.keys["right"] = False
+            elif symbol == pyglet.window.key.UP:
+                self.keys["up"] = False
+            elif symbol == pyglet.window.key.DOWN:
+                self.keys["down"] = False
+
+    def on_mouse_press(self, x, y, button, modifiers):
+        if self.paused:
+            # Check if a pause menu button was clicked
+            for button_shape, button_data in zip(self.pause_menu_shapes, self.pause_menu_buttons):
+                if (
+                    button_shape.x <= x <= button_shape.x + button_shape.width
+                    and button_shape.y <= y <= button_shape.y + button_shape.height
+                ):
+                    button_data["action"]()  # Call the button's action
 
     def game_over(self):
         self.is_running = False
@@ -73,6 +129,9 @@ class GameScene:
             self.update_game_logic()
 
     def update_game_logic(self):
+        original_x = self.player.x
+        original_y = self.player.y
+
         # Move left
         if self.keys["left"]:
             if self.player.image != self.player_animations["left"]:
@@ -111,3 +170,22 @@ class GameScene:
             elif self.last_direction == "right" and self.player.image != self.player_animations["idle_right"]:
                 self.player.image = self.player_animations["idle_right"]
                 self.player._animation = self.player_animations["idle_right"]  # Reset animation
+            
+        # Check for collisions
+        for asset in self.collidable_assets:
+            if asset.check_collision(self.player):
+                # If collision occurs, reset the player's position
+                self.player.x = original_x
+                self.player.y = original_y
+                print("Collision detected! Movement blocked.")
+                break
+
+    def resume_game(self):
+        self.paused = False  # Resume the game
+
+    def restart_game(self):
+        from scenes.loading import LoadingScene
+        self.game.switch_scene(LoadingScene(self.game))  # Restart the game
+
+    def quit_game(self):
+        pyglet.app.exit()  # Quit the game
