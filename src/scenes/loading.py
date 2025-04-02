@@ -34,9 +34,11 @@ class LoadingScene:
             "up": pyglet.image.load_animation("src/assets/characters/dev_default/move_up.gif"),
             "down": pyglet.image.load_animation("src/assets/characters/dev_default/move_down.gif"),
         }
+        print("Log: Character: Animations: Loaded default animations")
 
         player_image = pyglet.image.load_animation("src/assets/characters/dev_default/dev_default.gif")
         self.player = pyglet.sprite.Sprite(self.player_animations["idle"], x=100, y=100)  # Initial position
+        print(f"Log: GameScene: Player.Sprite: Loaded player with animation state {self.player_animations["idle"]} and spawned at {self.player.x} {self.player.y}")
 
         # Load enemies
         for i in range(5):  # Example: Load 5 enemies
@@ -60,3 +62,4 @@ class LoadingScene:
             enemies=self.enemies, 
             sounds=self.sounds)
         self.game.switch_scene(game_scene)
+        print(f"Log: Scene: Switched scene to {game_scene}")
