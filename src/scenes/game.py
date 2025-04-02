@@ -74,21 +74,27 @@ class GameScene:
     def update_game_logic(self):
         # Determine the direction of movement
         if self.keys["left"]:
-            self.player.image = self.player_animations["left"]
+            if self.player.image != self.player_animations["left"]:
+                self.player.image = self.player_animations["left"]
+                self.player._animation = self.player_animations["left"]  # Reset animation
             self.player.x -= 200 * 0.016  # Move left
         elif self.keys["right"]:
-            self.player.image = self.player_animations["right"]
+            if self.player.image != self.player_animations["right"]:
+                self.player.image = self.player_animations["right"]
+                self.player._animation = self.player_animations["right"]  # Reset animation
             self.player.x += 200 * 0.016  # Move right
         elif self.keys["up"]:
-            self.player.image = self.player_animations["up"]
+            if self.player.image != self.player_animations["up"]:
+                self.player.image = self.player_animations["up"]
+                self.player._animation = self.player_animations["up"]  # Reset animation
             self.player.y += 200 * 0.016  # Move up
         elif self.keys["down"]:
-            self.player.image = self.player_animations["down"]
+            if self.player.image != self.player_animations["down"]:
+                self.player.image = self.player_animations["down"]
+                self.player._animation = self.player_animations["down"]  # Reset animation
             self.player.y -= 200 * 0.016  # Move down
         else:
             # If no keys are pressed, set the animation to idle
-            self.player.image = self.player_animations["idle"]
-
-        # Example: Update enemy positions or states
-        for enemy in self.enemies:
-            enemy.x += 1  # Example movement logic
+            if self.player.image != self.player_animations["idle"]:
+                self.player.image = self.player_animations["idle"]
+                self.player._animation = self.player_animations["idle"]  # Reset animation
