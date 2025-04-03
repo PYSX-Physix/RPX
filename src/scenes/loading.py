@@ -55,7 +55,7 @@ class LoadingScene:
 
         # Load non-collidable assets
         self.non_collidable_assets = [
-            NonCollidableAsset(100, 100, f"{imagepath}/grass.png", 4.0),
+            NonCollidableAsset(100, 100, f"{imagepath}/grass.png"),
         ]
         print(f"Log: Non-collidable assets loaded: {len(self.non_collidable_assets)}")
 
