@@ -15,22 +15,23 @@ class LoadingLevel_GameStartArea(LoadingSceneBase):
             CollidableAsset(400, 200, 20, 20, image_path=f"{imagepath}/bush.png"),
             CollidableAsset(300, 300, 20, 20, image_path=f"{imagepath}/lantern-silver.gif"),
         ]
-        print("Log: Level 1 collidable assets loaded.")
+        print(f"Log: Collidable assets loaded: {self.collidable_assets}")
 
         # Load level-specific non-collidable assets
         self.non_collidable_assets = [
             
         ]
-        if self.non_collidable_assets is None:
-            print ("No walkthrough assets loaded skipping")
-        print("Log: Level 1 non-collidable assets loaded.")
+        print(f"Log: Non-collidable assets loaded: {self.non_collidable_assets}")
         self.light_sources = [
             LightSource(300, 300, 150, color=(255, 255, 200), intensity=0.5),
             LightSource(500, 400, 100, color=(255, 200, 150), intensity=0.7),
         ]
-        print("Log: Level 1 light sources loaded.")
+        print(f"Log: Light sources loaded: {self.light_sources}")
 
-        print("No sounds loaded because none were specified")
+        self.sounds = [
+
+        ]
+        print(f"Log: Sound assets loaded: {self.sounds}")
     
     def update(self, dt):
         self.load_assets()
@@ -38,7 +39,7 @@ class LoadingLevel_GameStartArea(LoadingSceneBase):
 
     def load_assets(self):
         # Load player assets
-        self.load_player("right")
+        self.load_player(100,300)
 
         # Load level-specific assets
         self.load_level_specific_assets()
