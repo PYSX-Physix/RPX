@@ -79,8 +79,8 @@ class MenuScene:
 
     # Button actions
     def start_game(self):
-        from scenes.loading import LoadingScene
-        self.game.switch_scene(LoadingScene(self.game))  # Switch to the loading scene
+        from scenes.loading import LoadingLevel_GameStartArea
+        self.game.switch_scene(LoadingLevel_GameStartArea(self.game))  # Switch to the loading scene
         # Add logic to switch to the game scene
 
     def show_options(self):
