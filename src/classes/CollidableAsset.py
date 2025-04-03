@@ -1,7 +1,7 @@
 import pyglet
 
 class CollidableAssetClass:
-    def __init__(self, x, y, width, height, color=(200, 200, 200), image_path=None, scale=1.0):
+    def __init__(self, x, y, width, height, color=(200, 200, 200), image_path=None, scale: float = 1.0):
         if image_path:
             # Load the image as a sprite
             self.sprite = pyglet.sprite.Sprite(pyglet.image.load(image_path), x=x, y=y)

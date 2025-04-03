@@ -1,4 +1,7 @@
 import pyglet
+from utils.helpers import imagepath, load_image
+import os
+
 
 class GameScene:
     def __init__(self, game, player=None, player_animations=None, enemies=None, sounds=None, collidable_assets=None, non_collidable_assets=None):
@@ -19,6 +22,13 @@ class GameScene:
         self.collidable_assets = collidable_assets if collidable_assets else []  # List of collidable assets
         self.non_collidable_assets = non_collidable_assets if non_collidable_assets else []  # List of non-collidable assets
         self.last_direction = "right"  # Default direction
+
+        # Pause menu background image
+        pause_background_path = os.path.join(imagepath, "background.png")
+        self.pause_menu_background_image = load_image(pause_background_path)
+        self.pause_menu_background_sprite = pyglet.sprite.Sprite(
+            self.pause_menu_background_image, x=0, y=0
+        )
 
         # Pause menu buttons
         self.pause_menu_buttons = [
@@ -76,7 +86,10 @@ class GameScene:
     def on_draw(self):
         self.game.window.clear()
         if self.paused:
-            # Draw the pause menu
+            # Draw the pause menu background image
+            self.pause_menu_background_sprite.draw()
+
+            # Draw the pause menu buttons
             for button_shape, button_label in zip(self.pause_menu_shapes, self.pause_menu_labels):
                 button_shape.draw()
                 button_label.draw()
