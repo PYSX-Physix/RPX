@@ -32,6 +32,8 @@ class LoadingLevel_GameStartArea(LoadingSceneBase):
 
         ]
         print(f"Log: Sound assets loaded: {self.sounds}")
+        self.enemies = []
+        print(f"Log: Enemies loaded: {self.enemies}")
     
     def update(self, dt):
         self.load_assets()
