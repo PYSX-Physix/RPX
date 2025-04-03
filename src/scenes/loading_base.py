@@ -14,7 +14,7 @@ class LoadingSceneBase:
     def update(self, dt):
         pass
 
-    def load_player(self):
+    def load_player(self, direction):
         # Load player animations
         from utils.helpers import characterpath
         self.player_animations = {
@@ -25,7 +25,7 @@ class LoadingSceneBase:
             "up": pyglet.image.load_animation(f"{characterpath}/dev_default/move_up.gif"),
             "down": pyglet.image.load_animation(f"{characterpath}/dev_default/move_down.gif"),
         }
-        self.player = pyglet.sprite.Sprite(self.player_animations["idle_right"], x=100, y=100)
+        self.player = pyglet.sprite.Sprite(self.player_animations[f"idle_{direction}"], x=100, y=100)
         print("Log: Player loaded.")
 
     def on_draw(self):

@@ -38,7 +38,7 @@ class LoadingLevel_GameStartArea(LoadingSceneBase):
 
     def load_assets(self):
         # Load player assets
-        self.load_player()
+        self.load_player("right")
 
         # Load level-specific assets
         self.load_level_specific_assets()
