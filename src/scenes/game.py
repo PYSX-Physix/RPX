@@ -214,8 +214,8 @@ class GameScene:
         self.paused = False  # Resume the game
 
     def restart_game(self):
-        from scenes.loading import LoadingScene
-        self.game.switch_scene(LoadingScene(self.game))  # Restart the game
+        from scenes.loading import LoadingLevel_GameStartArea
+        self.game.switch_scene(LoadingLevel_GameStartArea(self.game))  # Restart the game
 
     def quit_game(self):
         pyglet.app.exit()  # Quit the game
