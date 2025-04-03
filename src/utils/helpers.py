@@ -9,12 +9,12 @@ characterpath = os.path.join(basepath, "assets", "characters")
 
 def load_image(file_path):
     from pyglet import image
-    print(f"Loaded images at {file_path}")
+    print(f"Log: Loaded images at {file_path}")
     return image.load(file_path)
 
 def load_sound(file_path):
     from pyglet import media
-    print(f"Loaded sound at {file_path}")
+    print(f"Log: Loaded sound at {file_path}")
     return media.load(file_path, streaming=False)
 
 def load_animation(frames, duration):

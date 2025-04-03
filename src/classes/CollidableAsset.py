@@ -3,12 +3,22 @@ import pyglet
 class CollidableAssetClass:
     def __init__(self, x, y, width, height, color=(200, 200, 200), image_path=None, scale: float = 1.0):
         if image_path:
-            # Load the image as a sprite
-            self.sprite = pyglet.sprite.Sprite(pyglet.image.load(image_path), x=x, y=y)
+            try:
+                # Try to load the image as an animation (GIF)
+                image = pyglet.image.load_animation(image_path)
+                print(f"Log: Loaded animation: {image_path}")
+            except Exception:
+                # If it fails, load it as a static image
+                image = pyglet.image.load(image_path)
+                print(f"Log: Loaded static image: {image_path}")
+
+            # Create a sprite for the image or animation
+            self.sprite = pyglet.sprite.Sprite(image, x=x, y=y)
+            self.sprite.scale = scale
             self.width = self.sprite.width
             self.height = self.sprite.height
-            self.sprite.scale = scale
         else:
+            print("Log: No sprite was given. Using default cube.")
             # Use a rectangle if no image is provided
             self.sprite = None
             self.shape = pyglet.shapes.Rectangle(x, y, width, height, color=color)

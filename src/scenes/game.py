@@ -4,7 +4,7 @@ import os
 
 
 class GameScene:
-    def __init__(self, game, player=None, player_animations=None, enemies=None, sounds=None, collidable_assets=None, non_collidable_assets=None):
+    def __init__(self, game, player=None, player_animations=None, enemies=None, sounds=None, collidable_assets=None, non_collidable_assets=None, light_sources=None, dynamic_lighting_enabled=False):
         self.game = game
         self.player = player  # Player sprite
         self.player_animations = player_animations  # Animations for the player
@@ -21,7 +21,9 @@ class GameScene:
         }
         self.collidable_assets = collidable_assets if collidable_assets else []  # List of collidable assets
         self.non_collidable_assets = non_collidable_assets if non_collidable_assets else []  # List of non-collidable assets
+        self.light_sources =  light_sources if light_sources else []  # List of light sources
         self.last_direction = "right"  # Default direction
+        self.dynamic_lighting_enabled = dynamic_lighting_enabled
 
         # Pause menu background image
         pause_background_path = os.path.join(imagepath, "background.png")
@@ -142,6 +144,21 @@ class GameScene:
             self.update_game_logic()
 
     def update_game_logic(self):
+        # Update light sources dynamically if enabled
+        if self.dynamic_lighting_enabled:
+            for light in self.light_sources:
+                # Use the first frame of the animation to get the player's dimensions
+                if isinstance(self.player.image, pyglet.image.Animation):
+                    player_width = self.player.image.frames[0].image.width
+                    player_height = self.player.image.frames[0].image.height
+                else:
+                    player_width = self.player.image.width
+                    player_height = self.player.image.height
+
+                # Update the light's position based on the player's position
+                light.x = self.player.x + player_width // 2
+                light.y = self.player.y + player_height // 2
+
         original_x = self.player.x
         original_y = self.player.y
 
