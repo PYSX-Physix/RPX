@@ -5,7 +5,7 @@ a = Analysis(
     ['RPX.py'],
     pathex=[],
     binaries=[],
-    datas=[('assets','assets'), ('classes','classes'), ('scenes','scenes'), ('utils','utils')],
+    datas=[('assets','assets'), ('engineclass','engineclass'), ('scenes','scenes'), ('utils','utils')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
