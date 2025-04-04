@@ -11,6 +11,8 @@ class LoadingSceneBase:
         self.non_collidable_assets = []
         self.light_sources = []
         self.enemies = []
+        self.background_image = None
+        self.sounds = []
 
     def update(self, dt):
         pass
@@ -20,6 +22,11 @@ class LoadingSceneBase:
         from utils.helpers import characterpath
         self.player = Player(start_x, start_y, characterpath)
         print("Log: Player loaded.")
+
+    def load_game_background(self):
+        from utils.helpers import imagepath, load_image
+        self.background_image = load_image(f"{imagepath}/background.png")
+        print("Log: Game background loaded.")
 
     def on_draw(self):
         # Clear the window
@@ -47,6 +54,7 @@ class LoadingSceneBase:
             non_collidable_assets=self.non_collidable_assets,
             light_sources=self.light_sources,
             dynamic_lighting=self.game.dynamic_lighting,
-            enemies=self.enemies
+            enemies=self.enemies,
+            background_image=self.background_image,  # Pass the background image to the game scene
         )
         self.game.switch_scene(game_scene)
