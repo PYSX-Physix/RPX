@@ -4,6 +4,7 @@
         "Collidable",
         "imagepath",
         "pyglet",
-        "soundpath"
+        "soundpath",
+        "engineclass"
     ]
 }

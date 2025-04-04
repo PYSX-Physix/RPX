@@ -25,7 +25,6 @@ class LoadingLevel_GameStartArea(LoadingSceneBase):
         print(f"Log: Non-collidable assets loaded: {self.non_collidable_assets}")
         self.light_sources = [
             LightSource(300, 300, 150, color=(255, 255, 200), intensity=0.5),
-            LightSource(500, 400, 100, color=(255, 200, 150), intensity=0.7),
         ]
         print(f"Log: Light sources loaded: {self.light_sources}")
 
@@ -35,7 +34,8 @@ class LoadingLevel_GameStartArea(LoadingSceneBase):
         print(f"Log: Sound assets loaded: {self.sounds}")
         self.enemies = []
         print(f"Log: Enemies loaded: {self.enemies}")
-    
+
+
     def update(self, dt):
         self.load_assets()
 
@@ -43,6 +43,9 @@ class LoadingLevel_GameStartArea(LoadingSceneBase):
     def load_assets(self):
         # Load player assets
         self.load_player(100,300)
+
+        #Load the game background
+        self.load_game_background()
 
         # Load level-specific assets
         self.load_level_specific_assets()

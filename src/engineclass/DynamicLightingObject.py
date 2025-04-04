@@ -18,20 +18,45 @@ class LightSource:
         self.color = color
         self.intensity = intensity
 
+        # Create a radial gradient texture
+        self.gradient_texture = self.create_gradient_texture()
+
+    def create_gradient_texture(self):
+        """
+        Create a radial gradient texture for smooth lighting.
+        """
+        size = 256  # Texture size (higher = smoother gradient)
+        gradient_image = pyglet.image.ImageData(size, size, 'RGBA', b'\x00' * size * size * 4)
+
+        # Generate gradient data
+        data = bytearray(size * size * 4)
+        center = size // 2
+        for y in range(size):
+            for x in range(size):
+                dx = x - center
+                dy = y - center
+                distance = (dx**2 + dy**2)**0.5 / center
+                alpha = max(0, 1 - distance)  # Alpha decreases with distance
+                index = (y * size + x) * 4
+                data[index:index+4] = (255, 255, 255, int(alpha * 255))  # White with gradient alpha
+
+        gradient_image.set_data('RGBA', size * 4, bytes(data))
+        return gradient_image
+
     def draw(self):
         """
-        Draw the light source using additive blending.
+        Draw the light source using additive blending and a gradient texture.
         """
         # Enable blending for lighting effects
         glEnable(GL_BLEND)
         glBlendFunc(GL_SRC_ALPHA, GL_ONE)  # Additive blending for light effects
 
-        # Create and draw the light source
-        light = pyglet.shapes.Circle(
-            self.x, self.y, self.radius, color=self.color
-        )
-        light.opacity = int(self.intensity * 255)  # Convert intensity to opacity (0-255)
-        light.draw()
+        # Draw the gradient texture as a sprite
+        sprite = pyglet.sprite.Sprite(self.gradient_texture, x=self.x - self.radius, y=self.y - self.radius)
+        sprite.scale = self.radius / (self.gradient_texture.width // 2)  # Scale to match the radius
+        sprite.color = self.color  # Apply the light color
+        sprite.opacity = int(self.intensity * 255)  # Convert intensity to opacity (0-255)
+        sprite.draw()
 
         # Reset blending to default
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
@@ -66,4 +91,3 @@ class DynamicLightingManager:
         for light in self.light_sources:
             light.draw()
 
-    

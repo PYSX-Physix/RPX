@@ -84,29 +84,19 @@ class Player:
         # Attempt to move in the x direction
         self.sprite.x += dx
         for asset in collidable_assets:
-            collision, overlap_area = asset.check_collision(self)
-            print(f"Collision in x direction: {collision}, Overlap area: {overlap_area}")
-            if collision:
+            if asset.check_collision(self):  # Only check for collision status
+                print("Collision in x direction detected.")
                 # Resolve collision in the x direction
-                if dx > 0:  # Moving right
-                    self.sprite.x = overlap_area[0] - self.width
-                elif dx < 0:  # Moving left
-                    self.sprite.x = overlap_area[2]
-                print(f"Player position adjusted in x direction: {self.sprite.x}")
+                self.sprite.x = self.previous_x
                 break  # Stop checking further collisions in the x direction
 
         # Attempt to move in the y direction
         self.sprite.y += dy
         for asset in collidable_assets:
-            collision, overlap_area = asset.check_collision(self)
-            print(f"Collision in y direction: {collision}, Overlap area: {overlap_area}")
-            if collision:
+            if asset.check_collision(self):  # Only check for collision status
+                print("Collision in y direction detected.")
                 # Resolve collision in the y direction
-                if dy > 0:  # Moving up
-                    self.sprite.y = overlap_area[1] - self.height
-                elif dy < 0:  # Moving down
-                    self.sprite.y = overlap_area[3]
-                print(f"Player position adjusted in y direction: {self.sprite.y}")
+                self.sprite.y = self.previous_y
                 break  # Stop checking further collisions in the y direction
 
         print(f"Player position after move: x={self.sprite.x}, y={self.sprite.y}")
