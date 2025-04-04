@@ -1,7 +1,7 @@
 from scenes.loading_base import LoadingSceneBase
-from classes.CollidableAsset import CollidableAssetClass as CollidableAsset
-from classes.WalkThroughAsset import NonCollidableAsset
-from classes.DynamicLightingObject import LightSource
+from engineclass.CollidableAsset import CollidableAssetClass as CollidableAsset
+from engineclass.WalkThroughAsset import NonCollidableAsset
+from engineclass.DynamicLightingObject import LightSource
 
 
 class LoadingLevel_GameStartArea(LoadingSceneBase):

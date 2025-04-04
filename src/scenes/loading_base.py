@@ -1,5 +1,6 @@
 import pyglet
 from scenes.game import GameScene
+from engineclass.player import Player
 
 class LoadingSceneBase:
     def __init__(self, game):
@@ -17,15 +18,7 @@ class LoadingSceneBase:
     def load_player(self, start_x, start_y):
         # Load player animations
         from utils.helpers import characterpath
-        self.player_animations = {
-            "idle_right": pyglet.image.load_animation(f"{characterpath}/dev_default/idle-right.gif"),
-            "idle_left": pyglet.image.load_animation(f"{characterpath}/dev_default/idle-left.gif"),
-            "left": pyglet.image.load_animation(f"{characterpath}/dev_default/move_left.gif"),
-            "right": pyglet.image.load_animation(f"{characterpath}/dev_default/move_right.gif"),
-            "up": pyglet.image.load_animation(f"{characterpath}/dev_default/move_up.gif"),
-            "down": pyglet.image.load_animation(f"{characterpath}/dev_default/move_down.gif"),
-        }
-        self.player = pyglet.sprite.Sprite(self.player_animations[f"idle_right"], x=start_x, y=start_y)
+        self.player = Player(start_x, start_y, characterpath)
         print("Log: Player loaded.")
 
     def on_draw(self):
@@ -50,9 +43,9 @@ class LoadingSceneBase:
         game_scene = GameScene(
             self.game,
             player=self.player,
-            player_animations=self.player_animations,
             collidable_assets=self.collidable_assets,
             non_collidable_assets=self.non_collidable_assets,
             light_sources=self.light_sources,
+            enemies=self.enemies
         )
         self.game.switch_scene(game_scene)
