@@ -1,11 +1,11 @@
 import pyglet
 from utils.helpers import imagepath, load_image
 from engineclass.player import Player
-import os
+from engineclass.DynamicLightingObject import DynamicLightingManager
 
 
 class GameScene:
-    def __init__(self, game, player, collidable_assets, non_collidable_assets, light_sources, enemies):
+    def __init__(self, game, player, collidable_assets, non_collidable_assets, light_sources, enemies, dynamic_lighting):
         self.game = game
         self.player = player
         self.collidable_assets = collidable_assets
@@ -14,7 +14,10 @@ class GameScene:
         self.keys = {"left": False, "right": False, "up": False, "down": False}
         self.is_running = True  # Initialize the game as running
         self.paused = False  # Initialize the game as not paused
-        self.dynamic_lighting_enabled = True  # Enable dynamic lighting by default
+
+        # Dynamic Lighting
+        self.dynamic_lighting_enabled = dynamic_lighting  # Use the passed dynamic lighting setting
+        self.lighting_manager = DynamicLightingManager()
         self.last_direction = "right"  # Track the last direction for idle animation
         self.player_animations = player.animations if isinstance(player, Player) else {}
         self.enemies = enemies
@@ -94,6 +97,20 @@ class GameScene:
         for asset in self.non_collidable_assets:
             asset.draw()
 
+    def draw_dynamic_lighting(self):
+        """Draw dynamic lighting effects."""
+        if self.dynamic_lighting_enabled:
+            # Enable additive blending for lighting effects
+            pyglet.gl.glEnable(pyglet.gl.GL_BLEND)
+            pyglet.gl.glBlendFunc(pyglet.gl.GL_SRC_ALPHA, pyglet.gl.GL_ONE)
+
+            # Draw each light source
+            for light in self.light_sources:
+                light.draw()
+
+            # Reset blending to default
+            pyglet.gl.glBlendFunc(pyglet.gl.GL_SRC_ALPHA, pyglet.gl.GL_ONE_MINUS_SRC_ALPHA)
+
     def on_draw(self):
         self.game.window.clear()
         if self.paused:
@@ -108,6 +125,10 @@ class GameScene:
             # Draw the game elements
             self.draw()
 
+            # Draw dynamic lighting if enabled
+            if self.dynamic_lighting_enabled:
+                self.draw_dynamic_lighting()
+
     def on_key_press(self, symbol, modifiers):
         if symbol == pyglet.window.key.SPACE:
             # Override the default quit behavior and toggle the pause menu
@@ -115,8 +136,10 @@ class GameScene:
         elif not self.paused:  # Only handle movement keys if the game is not paused
             if symbol == pyglet.window.key.LEFT:
                 self.keys["left"] = True
+                self.last_direction = "left"  # Update last direction
             elif symbol == pyglet.window.key.RIGHT:
                 self.keys["right"] = True
+                self.last_direction = "right"  # Update last direction
             elif symbol == pyglet.window.key.UP:
                 self.keys["up"] = True
             elif symbol == pyglet.window.key.DOWN:
@@ -153,70 +176,53 @@ class GameScene:
             self.update_game_logic()
 
     def update_game_logic(self):
-        # Update light sources dynamically if enabled
-        if self.dynamic_lighting_enabled:
-            for light in self.light_sources:
-                # Use the first frame of the animation to get the player's dimensions
-                if isinstance(self.player.sprite.image, pyglet.image.Animation):
-                    player_width = self.player.sprite.image.frames[0].image.width
-                    player_height = self.player.sprite.image.frames[0].image.height
-                else:
-                    player_width = self.player.sprite.image.width
-                    player_height = self.player.sprite.image.height
-
-                # Update the light's position based on the player's position
-                light.x = self.player.sprite.x + player_width // 2
-                light.y = self.player.sprite.y + player_height // 2
-
         original_x = self.player.sprite.x
         original_y = self.player.sprite.y
 
         # Move left
         if self.keys["left"]:
             if self.player.sprite.image != self.player_animations["left"]:
-                self.player.sprite.image = self.player_animations["left"]
-                self.player.sprite._animation = self.player_animations["left"]  # Reset animation
+                self.player.sprite.image = self.player_animations["left"]  # Set the walking left animation
             self.player.sprite.x -= 200 * 0.016  # Move left
             self.last_direction = "left"  # Update last direction
 
         # Move right
         if self.keys["right"]:
             if self.player.sprite.image != self.player_animations["right"]:
-                self.player.sprite.image = self.player_animations["right"]
-                self.player.sprite._animation = self.player_animations["right"]  # Reset animation
+                self.player.sprite.image = self.player_animations["right"]  # Set the walking right animation
             self.player.sprite.x += 200 * 0.016  # Move right
             self.last_direction = "right"  # Update last direction
 
         # Move up
         if self.keys["up"]:
             if self.player.sprite.image != self.player_animations["up"]:
-                self.player.sprite.image = self.player_animations["up"]
-                self.player.sprite._animation = self.player_animations["up"]  # Reset animation
+                self.player.sprite.image = self.player_animations["up"]  # Set the walking up animation
             self.player.sprite.y += 200 * 0.016  # Move up
 
         # Move down
         if self.keys["down"]:
             if self.player.sprite.image != self.player_animations["down"]:
-                self.player.sprite.image = self.player_animations["down"]
-                self.player.sprite._animation = self.player_animations["down"]  # Reset animation
+                self.player.sprite.image = self.player_animations["down"]  # Set the walking down animation
             self.player.sprite.y -= 200 * 0.016  # Move down
 
         # If no keys are pressed, set the idle animation based on the last direction
         if not (self.keys["left"] or self.keys["right"] or self.keys["up"] or self.keys["down"]):
-            if self.player.last_direction == "left" and self.player.sprite.image != self.player_animations["idle_left"]:
-                self.player.sprite.image = self.player_animations["idle_left"]
-                self.player.sprite._animation = self.player_animations["idle_left"]  # Reset animation
-            elif self.player.last_direction == "right" and self.player.sprite.image != self.player_animations["idle_right"]:
-                self.player.sprite.image = self.player_animations["idle_right"]
-                self.player.sprite._animation = self.player_animations["idle_right"]  # Reset animation
-            
+            if self.last_direction == "left" and self.player.sprite.image != self.player_animations["idle_left"]:
+                self.player.sprite.image = self.player_animations["idle_left"]  # Set idle left animation
+            elif self.last_direction == "right" and self.player.sprite.image != self.player_animations["idle_right"]:
+                self.player.sprite.image = self.player_animations["idle_right"]  # Set idle right animation
+            elif self.last_direction == "up" and self.player.sprite.image != self.player_animations["idle_up"]:
+                self.player.sprite.image = self.player_animations["idle_up"]  # Set idle up animation
+            elif self.last_direction == "down" and self.player.sprite.image != self.player_animations["idle_down"]:
+                self.player.sprite.image = self.player_animations["idle_down"]  # Set idle down animation
+
         # Check for collisions
         for asset in self.collidable_assets:
-            if asset.check_collision(self.player.sprite):
+            if asset.check_collision(self.player):
                 # If collision occurs, reset the player's position
                 self.player.sprite.x = original_x
                 self.player.sprite.y = original_y
-                print("Collision detected! Movement blocked.")
+                print(f"Collision detected! Movement blocked by an asset at {asset.x},{asset.y}.")
                 break
 
     def resume_game(self):

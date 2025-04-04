@@ -46,6 +46,7 @@ class LoadingSceneBase:
             collidable_assets=self.collidable_assets,
             non_collidable_assets=self.non_collidable_assets,
             light_sources=self.light_sources,
+            dynamic_lighting=self.game.dynamic_lighting,
             enemies=self.enemies
         )
         self.game.switch_scene(game_scene)

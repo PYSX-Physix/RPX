@@ -1,6 +1,7 @@
-from scenes.loading_base import LoadingSceneBase
+from engineclass.loading_base import LoadingSceneBase
 from engineclass.CollidableAsset import CollidableAssetClass as CollidableAsset
-from engineclass.WalkThroughAsset import NonCollidableAsset
+from engineclass.PixelPerfect import PixelPerfectAsset
+from engineclass.WalkThroughAsset import NonCollidableAsset as WalkThroughAsset
 from engineclass.DynamicLightingObject import LightSource
 
 
@@ -12,8 +13,8 @@ class LoadingLevel_GameStartArea(LoadingSceneBase):
         # Load level-specific collidable assets
         from utils.helpers import imagepath
         self.collidable_assets = [
-            CollidableAsset(400, 200, 20, 20, image_path=f"{imagepath}/bush.png"),
-            CollidableAsset(300, 300, 20, 20, image_path=f"{imagepath}/lantern-silver.gif"),
+            CollidableAsset(400, 200, 20, 20, image_path=f"{imagepath}/bush.png", show_collision_box=True),
+            CollidableAsset(300, 300, 20, 20, image_path=f"{imagepath}/lantern-silver.gif", show_collision_box=True),
         ]
         print(f"Log: Collidable assets loaded: {self.collidable_assets}")
 

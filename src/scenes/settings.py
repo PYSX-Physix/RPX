@@ -82,6 +82,25 @@ class SettingsScene:
             anchor_y="center",
         )
 
+        # Apply button
+        self.apply_button = pyglet.shapes.Rectangle(
+            x=self.game.window.width // 2 - 100,
+            y=180,
+            width=200,
+            height=40,
+            color=(50, 50, 200),
+        )
+
+        self.apply_label = pyglet.text.Label(
+            "Apply",
+            font_name="Arial",
+            font_size=16,
+            x=self.game.window.width // 2,
+            y=200,
+            anchor_x="center",
+            anchor_y="center",
+        )
+        #Restart notice
         self.restart_notice = pyglet.text.Label(
             "A restart is required to apply changes.",
             font_name="Arial",
@@ -105,6 +124,8 @@ class SettingsScene:
         self.back_button.draw()
         self.back_label.draw()
         self.restart_notice.draw()  # Draw the restart notice
+        self.apply_button.draw()
+        self.apply_label.draw()
 
     def on_mouse_press(self, x, y, button, modifiers):
         # Load the button click sound
@@ -136,6 +157,10 @@ class SettingsScene:
         # Toggle the dynamic lighting setting
         self.game.dynamic_lighting = not self.game.dynamic_lighting
         self.lighting_label.text = f"Dynamic Lighting: {'On' if self.game.dynamic_lighting else 'Off'}"
+
+        # Update the current scene's dynamic lighting state
+        if hasattr(self.game.current_scene, "dynamic_lighting_enabled"):
+            self.game.current_scene.dynamic_lighting_enabled = self.game.dynamic_lighting
 
     def cycle_resolution(self):
         # Cycle through the available resolutions
