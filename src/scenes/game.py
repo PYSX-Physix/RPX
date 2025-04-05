@@ -40,7 +40,7 @@ class GameScene:
         # Camera position
         self.camera_x = 0
         self.camera_y = 0
-
+        
     def initialize_pause_menu(self):
         """Initialize the pause menu buttons and their actions."""
         button_width = 200

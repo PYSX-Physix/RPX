@@ -13,9 +13,13 @@ class LoadingSceneBase:
         self.enemies = []
         self.background_image = None
         self.sounds = []
+        self.background_bounds = None
 
     def update(self, dt):
-        pass
+        if self.player and self.background_bounds:
+            print (f"Log: Player position before clamping: x={self.player.sprite.x}, y={self.player.sprite.y}")
+            self.player.clamp_to_bounds(self.background_bounds)
+            print (f"Log: Player position after clamping: x={self.player.sprite.x}, y={self.player.sprite.y}")
 
     def load_player(self, start_x, start_y):
         # Load player animations
@@ -27,6 +31,16 @@ class LoadingSceneBase:
         from utils.helpers import imagepath, load_image
         self.background_image = load_image(f"{imagepath}/background.png")
         print("Log: Game background loaded.")
+        self.background_bounds = {
+            "x_min": 0,
+            "x_max": self.background_image.width,
+            "y_min": 0,
+            "y_max": self.background_image.height,
+        }
+
+        print(f"Log: Background bounds set to: {self.background_bounds}")
+        self.player.clamp_to_bounds(self.background_bounds)
+        print(f"Log: Player position clamped to background bounds: x={self.player.sprite.x}, y={self.player.sprite.y}")
 
     def on_draw(self):
         # Clear the window

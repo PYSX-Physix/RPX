@@ -36,6 +36,11 @@ class Player:
             batch=None  # No batch, drawn individually
         )
 
+    def clamp_to_bounds(self, bounds):
+        self.sprite.x = max(bounds["x_min"], min(self.sprite.x, bounds["x_max"] - self.width))
+        self.sprite.y = max(bounds["y_min"], min(self.sprite.y, bounds["y_max"] - self.height))
+        print(f"Log: Player position clamped to: x={self.sprite.x}, y={self.sprite.y}")
+
     def _generate_alpha_mask(self, image):
         """
         Generate an alpha mask for pixel-perfect collision detection.
@@ -79,8 +84,6 @@ class Player:
         self.previous_x = self.sprite.x
         self.previous_y = self.sprite.y
 
-        print(f"Attempting to move: dx={dx}, dy={dy}")
-
         # Attempt to move in the x direction
         self.sprite.x += dx
         for asset in collidable_assets:
@@ -98,8 +101,6 @@ class Player:
                 # Resolve collision in the y direction
                 self.sprite.y = self.previous_y
                 break  # Stop checking further collisions in the y direction
-
-        print(f"Player position after move: x={self.sprite.x}, y={self.sprite.y}")
 
         # Update the hitbox position
         self.hitbox.x = self.sprite.x
