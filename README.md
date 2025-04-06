@@ -38,7 +38,7 @@ rpg-game
 
 3. Run the game:
    ```
-   python src/main.py
+   python src/RPX.py
    ```
 
 ## Gameplay Details
