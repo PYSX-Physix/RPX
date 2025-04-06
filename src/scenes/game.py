@@ -1,5 +1,6 @@
 import pyglet
 from utils.helpers import imagepath
+# Engine Classes
 from engineclass.player import Player
 from engineclass.DynamicLightingObject import DynamicLightingManager
 
@@ -11,7 +12,11 @@ class GameScene:
         self.collidable_assets = collidable_assets
         self.non_collidable_assets = non_collidable_assets
         self.light_sources = light_sources
+        # Controller setup
+        self.controller_manager = pyglet.input.ControllerManager()
+        self.controller = None
         self.keys = {"left": False, "right": False, "up": False, "down": False}
+        # Pause logic
         self.is_running = True  # Initialize the game as running
         self.paused = False  # Initialize the game as not paused
 
@@ -36,11 +41,27 @@ class GameScene:
         self.pause_menu_buttons = []
 
         self.initialize_pause_menu()
+        self.initialize_controller()
 
         # Camera position
         self.camera_x = 0
         self.camera_y = 0
-        
+
+    def initialize_controller(self):
+        """Initialize the game controller."""
+        input_controller = self.controller_manager.get_controllers()
+        if input_controller:
+            self.controller = input_controller[0]
+            self.controller.open()
+            print(f"Log: Controller {self.controller.name} initialized.")
+
+            self.controller.on_joyaxis_motion = self.on_joyaxis_motion
+            self.controller.on_button_press = self.on_button_press
+            self.controller.on_button_release = self.on_button_release
+
+        else:
+            print("Log: No controller found.")
+
     def initialize_pause_menu(self):
         """Initialize the pause menu buttons and their actions."""
         button_width = 200
@@ -216,6 +237,46 @@ class GameScene:
                     and button_shape.y <= y <= button_shape.y + button_shape.height
                 ):
                     button_data["action"]()  # Call the button's action
+    
+    def on_joyaxis_motion(self, controller, axis, value):
+        """Handle joystick axis motion."""
+        if axis == "x":
+            if value < -0.5:
+                self.keys["left"] = True
+                self.keys["right"] = False
+                self.last_direction = "left"  # Update last direction
+            elif value > 0.5:
+                self.keys["right"] = True
+                self.keys["left"] = False
+                self.last_direction = "right"
+            else:
+                self.keys["left"] = False
+                self.keys["right"] = False
+
+        if axis == "y":
+            if value < -0.5:
+                self.keys["up"] = True
+                self.keys["down"] = False
+            elif value > 0.5:
+                self.keys["down"] = True
+                self.keys["up"] = False
+            else:
+                self.keys["up"] = False
+                self.keys["down"] = False
+
+
+    def on_button_press(self, controller, button):
+        """Handle button press events."""
+        if button == "start":
+            self.paused = not self.paused
+        elif button == "a":
+            print("Button A pressed")
+
+    def on_button_release(self, controller, button):
+        """Handle button release events."""
+        if button == "a":
+            print("Button A released")
+
 
     def game_over(self):
         self.is_running = False

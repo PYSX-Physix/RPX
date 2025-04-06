@@ -9,7 +9,7 @@ class CollidableAssetClass:
         self.debug_collision_rect = None
         self.show_collision_box = show_collision_box
 
-        if image_path:
+        if image_path != None:
             try:
                 # Try to load the image as an animation (GIF)
                 image = pyglet.image.load_animation(image_path)

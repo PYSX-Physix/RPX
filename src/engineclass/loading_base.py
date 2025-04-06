@@ -1,6 +1,7 @@
 import pyglet
 from scenes.game import GameScene
 from engineclass.player import Player
+from engineclass.CollidableAsset import CollidableAssetClass as CollidableAsset
 
 class LoadingSceneBase:
     def __init__(self, game):
@@ -29,7 +30,7 @@ class LoadingSceneBase:
 
     def load_game_background(self):
         from utils.helpers import imagepath, load_image
-        self.background_image = load_image(f"{imagepath}/background.png")
+        self.background_image = load_image(f"{imagepath}/RPX-GameMap.png")
         print("Log: Game background loaded.")
         self.background_bounds = {
             "x_min": 0,
@@ -41,6 +42,10 @@ class LoadingSceneBase:
         print(f"Log: Background bounds set to: {self.background_bounds}")
         self.player.clamp_to_bounds(self.background_bounds)
         print(f"Log: Player position clamped to background bounds: x={self.player.sprite.x}, y={self.player.sprite.y}")
+        self.collidable_assets = [
+            CollidableAsset(500, 2500, 200, 200, image_path=None),
+            CollidableAsset(600, 2500, 200, 200, image_path=None),
+        ]
 
     def on_draw(self):
         # Clear the window
