@@ -1,12 +1,19 @@
-# RPX Game Engine Documentation
+# RPX Game Documentation
 
 ## Overview
-This RPX Game Engine is built using PyGlet, a Python library for creating games and multimedia applications. The game engine features various scenes, engine classes, character interactions, and 2D environments.
+This RPX Game is built using PyGlet, a Python library for creating games and multimedia applications. The game features various scenes, character interactions, and 2D environments.
 
-## Setup Instructions
+## Supported Platforms
+Windows 10/11, MacOS 10.13 and newer
+
+## Option 1: Download Release
+
+Go to the releases tab and download the correct platform app.
+
+## Option 2: Build From Source
 1. Clone the repository:
    ```
-   git clone <repository-url>
+   git clone https://github.com/PYSX-Physix/RPX.git
    cd RPX
    ```
 
@@ -15,10 +22,9 @@ This RPX Game Engine is built using PyGlet, a Python library for creating games 
    pip install -r requirements.txt
    ```
 
-3. Run the game:
+3. Compile the game
    ```
-   python src/RPX.py
-   ```
+   pyinstaller src/RPX.spec
 
 ## Gameplay Details
 - Navigate through the main menu to start the game or exit.
