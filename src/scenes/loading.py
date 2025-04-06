@@ -13,8 +13,8 @@ class LoadingLevel_GameStartArea(LoadingSceneBase):
         # Load level-specific collidable assets
         from utils.helpers import imagepath
         self.collidable_assets = [
-            CollidableAsset(400, 2500, 20, 20, image_path=f"{imagepath}/bush.png"),
-            CollidableAsset(300, 2500, 20, 20, image_path=f"{imagepath}/lantern-silver.gif"),
+            CollidableAsset(1600, 2500, 20, 20, image_path=f"{imagepath}/bush.png"),
+            CollidableAsset(2000, 2500, 20, 20, image_path=f"{imagepath}/lantern-silver.gif"),
         ]
         print(f"Log: Collidable assets loaded: {self.collidable_assets}")
 
@@ -24,7 +24,7 @@ class LoadingLevel_GameStartArea(LoadingSceneBase):
         ]
         print(f"Log: Non-collidable assets loaded: {self.non_collidable_assets}")
         self.light_sources = [
-            LightSource(300, 2500, 150, color=(255, 255, 200), intensity=0.5),
+            LightSource(2000, 2500, 150, color=(255, 255, 200), intensity=0.5),
         ]
         print(f"Log: Light sources loaded: {self.light_sources}")
 
@@ -42,7 +42,7 @@ class LoadingLevel_GameStartArea(LoadingSceneBase):
 
     def load_assets(self):
         # Load player assets
-        self.load_player(100,2500)
+        self.load_player(1800,2500)
 
         #Load the game background
         self.load_game_background()
