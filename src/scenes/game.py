@@ -17,6 +17,7 @@ class GameScene:
         self.controller_manager = pyglet.input.ControllerManager()
         self.controller = None
         self.keys = {"left": False, "right": False, "up": False, "down": False}
+        self.initialize_controller()
         # Pause logic
         self.is_running = True  # Initialize the game as running
         self.paused = False  # Initialize the game as not paused
@@ -47,7 +48,6 @@ class GameScene:
         self.camera_y = 0
 
         self.initialize_pause_menu()
-        self.initialize_controller()
 
     
 
@@ -57,15 +57,10 @@ class GameScene:
         input_controller = self.controller_manager.get_controllers()
         if input_controller:
             self.controller = input_controller[0]
-            if self.controller.open == False:
-                self.controller.open()
-            elif self.controller.open == True:
-                print("Log: Controller already open.")
-                pass
-            print(f"Log: Controller {self.controller.name} initialized.")
+            self.controller.open()
 
             # Set up controller events
-            self.controller.on_dpad_motion = self.on_dpad_motion
+            self.controller.on_stick_motion = self.on_joyaxis_motion
             self.controller.on_button_press = self.on_button_press
             self.controller.on_button_release = self.on_button_release
 
@@ -84,7 +79,6 @@ class GameScene:
         # Define button actions
         button_actions = [
             {"label": "Resume", "action": self.resume_game},
-            {"label": "Restart", "action": self.restart_game},
             {"label": "Quit", "action": self.quit_game},
         ]
 
@@ -276,44 +270,30 @@ class GameScene:
 
         if not self.paused:
             if stick == "leftstick":
-                if value.x > -0.1:
-                    self.keys["left"] = True
-                    self.last_direction = "left"
-                    print("Log: Left joystick moved left")
-                elif value.x < 0.1:
+                if value.x > 0.09:
+                    self.keys["left"] = False
                     self.keys["right"] = True
                     self.last_direction = "right"
+                    print("Log: Left joystick moved left")
+                elif value.x < -0.09:
+                    self.keys["right"] = False
+                    self.keys["left"] = True
+                    self.last_direction = "left"
                     print("Log: Left joystick moved right")
-                elif value.y > -0.1:
-                    self.keys["down"] = True
-                    print("Log: Left joystick moved down")
-                elif value.y < 0.1:
+                elif value.y > 0.09:
+                    self.keys["down"] = False
                     self.keys["up"] = True
+                    print("Log: Left joystick moved down")
+                elif value.y < -0.09:
+                    self.keys["up"] = False
+                    self.keys["down"] = True
                     print("Log: Left joystick moved up")
-                elif value.x > -0.1:
-                    self.keys["left"] = False
-                    print("Log: Left joystick not moved left")
-                elif value.x < 0.1:
-                    self.keys["right"] = False
-                    print("Log: Left joystick not moved right")
-                elif value.y > -0.1:
-                    self.keys["down"] = False
-                    print("Log: Left joystick not moved down")
-                elif value.y < 0.1:
+                elif value.x > -0.09 and value.x < 0.09 and value.y > -0.09 and value.y < 0.09:
                     self.keys["up"] = False
-                    print("Log: Left joystick not moved up")
-                elif value.x < 0.1:
-                    self.keys["left"] = False
-                    print("Log: Left joystick not moved left")
-                elif value.x > -0.1:
-                    self.keys["right"] = False
-                    print("Log: Left joystick not moved right")
-                elif value.y < 0.1:
                     self.keys["down"] = False
-                    print("Log: Left joystick not moved down")
-                elif value.y > -0.1:
-                    self.keys["up"] = False
-                    print("Log: Left joystick not moved up")
+                    self.keys["right"] = False
+                    self.keys["left"] = False
+                    print("Log: Joystick not moved in any direction") 
                 
 
 
@@ -330,6 +310,13 @@ class GameScene:
             print("Button X pressed")
         elif button == "y":
             print("Button Y pressed")
+        elif button == "start":
+            self.paused = not self.paused  # Toggle the paused state
+            if self.paused:
+                print("Game paused")
+        elif button == "back":
+            print ("Map opened")
+
 
     def on_button_release(self, controller, button):
         """Handle button release events."""
@@ -344,6 +331,7 @@ class GameScene:
 
     def on_dpad_motion(self, dpad, value: Vec2):
         """Handle D-pad motion events."""
+        print(f"Log: D-pad {dpad} moved with value {value}")
         if not self.paused:
             if value.x < -0.1:
                 self.keys["left"] = True
