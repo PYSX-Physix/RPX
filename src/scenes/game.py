@@ -1,5 +1,3 @@
-import sys
-
 import pyglet
 from pyglet.math import Vec2
 from utils.helpers import imagepath
