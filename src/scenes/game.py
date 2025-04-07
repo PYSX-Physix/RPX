@@ -272,7 +272,7 @@ class GameScene:
     
     # Controller joystick handler (Part is still experimental)
     def on_joyaxis_motion(self, controller, stick, value: Vec2):
-        """Handle joystick axis motion."""
+        """Handle joystick axis motion. (EXPERIMENTAL)"""
         print(f"Log: Joystick axis {stick} moved with value {value}")
 
         if not self.paused:
@@ -304,7 +304,7 @@ class GameScene:
                 
     # Controller button press handler
     def on_button_press(self, controller, button):
-        """Handle button press events."""
+        """Handle button press events. (EXPERIMENTAL)"""
         if button == "start":
             self.paused = not self.paused
         elif button == "a":
@@ -324,7 +324,7 @@ class GameScene:
 
     # Controller button release handler
     def on_button_release(self, controller, button):
-        """Handle button release events."""
+        """Handle button release events. (EXPERIMENTAL)"""
         if button == "a":
             print("Button A released")
         elif button == "b":
@@ -336,7 +336,7 @@ class GameScene:
 
     # D-pad motion handler
     def on_dpad_motion(self, dpad, value: Vec2):
-        """Handle D-pad motion events."""
+        """Handle D-pad motion events. (EXPERIMENTAL)"""
         print(f"Log: D-pad {dpad} moved with value {value}")
         if not self.paused:
             if value.x < -0.1:
