@@ -9,15 +9,22 @@ from engineclass.DynamicLightingObject import DynamicLightingManager
 class GameScene:
     def __init__(self, game, player, collidable_assets, non_collidable_assets, light_sources, enemies, dynamic_lighting, background_image):
         self.game = game
+
+        # Character Types
+        self.enemies = enemies
         self.player = player
+
+        # Asset Types
         self.collidable_assets = collidable_assets
         self.non_collidable_assets = non_collidable_assets
         self.light_sources = light_sources
+
         # Controller setup
         self.controller_manager = pyglet.input.ControllerManager()
         self.controller = None
-        self.keys = {"left": False, "right": False, "up": False, "down": False}
+        self.keys = {"left": False, "right": False, "up": False, "down": False} # The keys dictionary to track movement
         self.initialize_controller()
+
         # Pause logic
         self.is_running = True  # Initialize the game as running
         self.paused = False  # Initialize the game as not paused
@@ -25,29 +32,27 @@ class GameScene:
         # Dynamic Lighting
         self.dynamic_lighting_enabled = dynamic_lighting  # Use the passed dynamic lighting setting
         self.lighting_manager = DynamicLightingManager()
+
+        #Player Animations
         self.last_direction = "right"  # Track the last direction for idle animation
         self.player_animations = player.animations if isinstance(player, Player) else {}
-        self.enemies = enemies
 
-        # Load the pause menu background image
+        # Pause menu background
         pause_background_image = pyglet.image.load(f"{imagepath}/background.png")
         self.pause_menu_background_sprite = pyglet.sprite.Sprite(pause_background_image, x=0, y=0)
+        # Initialize pause menu buttons
+        self.pause_menu_shapes = []
+        self.pause_menu_labels = []
+        self.pause_menu_buttons = []
+        self.initialize_pause_menu() # Creates the pause menu but does not draw it until paused
 
         #Game background image
         self.background_image = background_image
         self.background_sprite = pyglet.sprite.Sprite(self.background_image, x=0, y=0)
 
-        # Initialize pause menu buttons
-        self.pause_menu_shapes = []
-        self.pause_menu_labels = []
-        self.pause_menu_buttons = []
-    
-
         # Camera position
         self.camera_x = 0
         self.camera_y = 0
-
-        self.initialize_pause_menu()
 
     
 
@@ -207,9 +212,10 @@ class GameScene:
             if self.dynamic_lighting_enabled:
                 self.draw_dynamic_lighting()
 
+    # Game input handlers
+    # Keyboard pressed handlers
     def on_key_press(self, symbol, modifiers):
-        if symbol == pyglet.window.key.SPACE:
-            # Override the default quit behavior and toggle the pause menu
+        if symbol == pyglet.window.key.ESCAPE:
             self.paused = not self.paused  # Toggle the paused state
         elif not self.paused:  # Only handle movement keys if the game is not paused
             if symbol == pyglet.window.key.LEFT:

@@ -7,7 +7,7 @@ from scenes.settings import SettingsScene
 class Game:
     def __init__(self):
         self.window = pyglet.window.Window(width=1280, height=720, caption="RPX Game") # Game window
-        self.settings_file = "settings.json"
+        self.settings_file = "settings.json" # Settings file
         self.dynamic_lighting = False  # Default setting
         self.resolution = (1280, 720)  # Default resolution
 
@@ -34,6 +34,9 @@ class Game:
         def on_key_press(symbol, modifiers):
             if hasattr(self.current_scene, "on_key_press"):
                 self.current_scene.on_key_press(symbol, modifiers)
+                if symbol == pyglet.window.key.ESCAPE:
+                    return pyglet.event.EVENT_HANDLED
+                    
 
         @self.window.event
         def on_key_release(symbol, modifiers):
