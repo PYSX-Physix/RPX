@@ -1,9 +1,9 @@
 import pyglet
 from pyglet.math import Vec2
-from utils.helpers import imagepath
 # Engine Classes
 from engineclass.player import Player
 from engineclass.DynamicLightingObject import DynamicLightingManager
+from utils.helpers import imagepath
 
 
 class GameScene:
@@ -259,7 +259,7 @@ class GameScene:
                 self.keys["up"] = False
             elif symbol == pyglet.window.key.S:
                 self.keys["down"] = False
-
+    # Key release handlers
     def on_mouse_press(self, x, y, button, modifiers):
         if self.paused:
             # Check if a pause menu button was clicked
@@ -270,6 +270,7 @@ class GameScene:
                 ):
                     button_data["action"]()  # Call the button's action
     
+    # Controller joystick handler (Part is still experimental)
     def on_joyaxis_motion(self, controller, stick, value: Vec2):
         """Handle joystick axis motion."""
         print(f"Log: Joystick axis {stick} moved with value {value}")
@@ -301,9 +302,7 @@ class GameScene:
                     self.keys["left"] = False
                     print("Log: Joystick not moved in any direction") 
                 
-
-
-
+    # Controller button press handler
     def on_button_press(self, controller, button):
         """Handle button press events."""
         if button == "start":
@@ -323,7 +322,7 @@ class GameScene:
         elif button == "back":
             print ("Map opened")
 
-
+    # Controller button release handler
     def on_button_release(self, controller, button):
         """Handle button release events."""
         if button == "a":
@@ -335,6 +334,7 @@ class GameScene:
         elif button == "y":
             print("Button Y released")
 
+    # D-pad motion handler
     def on_dpad_motion(self, dpad, value: Vec2):
         """Handle D-pad motion events."""
         print(f"Log: D-pad {dpad} moved with value {value}")
@@ -381,6 +381,8 @@ class GameScene:
         # Update the camera position
         self.update_camera()
 
+
+    # Update the game logic every tick
     def update_game_logic(self):
         """Update the player's position and handle movement."""
         dx, dy = 0, 0
@@ -415,6 +417,7 @@ class GameScene:
         # Update the player's position
         self.player.move(dx, dy, self.collidable_assets)
 
+    # Update the player camera every tick
     def update_camera(self):
         """Update the camera position to follow the player."""
         screen_width = self.game.window.width
