@@ -1,7 +1,7 @@
 # RPX Game Documentation
 
 ## Overview
-This RPX Game is built using PyGlet, a Python library for creating games and multimedia applications. The game features various scenes, character interactions, and 2D environments.
+This RPX Game is built using PyGlet, a Python library for creating games and multimedia applications as well as a part of a custom engine deriving from PyGlet. The game features various scenes, character interactions, and 2D environments.
 
 ## Supported Platforms
 Windows 10/11, MacOS 10.13 and newer
