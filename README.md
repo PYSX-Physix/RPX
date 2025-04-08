@@ -25,7 +25,7 @@ Go to the releases tab and download the correct platform app.
 3. Compile the game
    ```
    pyinstaller src/RPX.spec
-
+   ```
 ## Gameplay Details
 - Navigate through the main menu to start the game or exit.
 - Control your character in the game scene, interact with enemies, and explore various environments.
