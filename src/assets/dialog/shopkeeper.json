@@ -1,0 +1,30 @@
+[
+    {
+        "prompt": "Hello there, traveler!",
+        "options": [
+            {
+                "text": "What do you have for sale?",
+                "response": "We have potions, scrolls, and swords.",
+                "condition": "has_item_potion"
+            },
+            {
+                "text": "I'm just passing by.",
+                "response": "Safe travels, then."
+            }
+        ]
+    },
+    {
+        "prompt": "Are you ready to venture into the dark caves?",
+        "options": [
+            {
+                "text": "Yes, I am prepared!",
+                "response": "Good luck, brave soul.",
+                "condition": "has_item_sword"
+            },
+            {
+                "text": "Not yet, I need more supplies.",
+                "response": "Come back when you're ready."
+            }
+        ]
+    }
+]

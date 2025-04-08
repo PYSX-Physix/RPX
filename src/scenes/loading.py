@@ -12,7 +12,7 @@ class LoadingLevel_GameStartArea(LoadingSceneBase):
 
     def load_level_specific_assets(self):
         # Load level-specific collidable assets
-        from utils.helpers import imagepath, characterpath
+        from utils.helpers import imagepath, characterpath, dialoguepath
         self.collidable_assets = [
             CollidableAsset(1600, 2500, 20, 20, image_path=f"{imagepath}/bush.png"),
             CollidableAsset(2000, 2500, 20, 20, image_path=f"{imagepath}/lantern-silver.gif"),
@@ -38,7 +38,7 @@ class LoadingLevel_GameStartArea(LoadingSceneBase):
 
         # Load level-specific NPCs
         self.npcs = [
-            NPC("Shopkeeper", f"{characterpath}/dev_default/dev_default.gif", 2100, 2500),
+            NPC("Shopkeeper", f"{characterpath}/dev_default/dev_default.gif", 2100, 2500, f"{dialoguepath}/shopkeeper.json"),
         ]
         print(f"Log: NPCs loaded: {[npc.name for npc in self.npcs]}")
 
