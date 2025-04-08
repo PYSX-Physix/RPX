@@ -7,12 +7,13 @@ from utils.helpers import imagepath
 
 
 class GameScene:
-    def __init__(self, game, player, collidable_assets, non_collidable_assets, light_sources, enemies, dynamic_lighting, background_image):
+    def __init__(self, game, player, collidable_assets, non_collidable_assets, light_sources, enemies, dynamic_lighting, background_image, npcs):
         self.game = game
 
         # Character Types
         self.enemies = enemies
         self.player = player
+        self.npcs = npcs
 
         # Asset Types
         self.collidable_assets = collidable_assets
@@ -141,6 +142,10 @@ class GameScene:
         for asset in self.non_collidable_assets:
             asset.draw()
 
+        # Draw the NPCs
+        for npc in self.npcs:
+            npc.draw()
+
     def draw_dynamic_lighting(self):
         """Draw dynamic lighting effects."""
         if self.dynamic_lighting_enabled:
@@ -208,9 +213,19 @@ class GameScene:
                 asset.sprite.x += self.camera_x
                 asset.sprite.y += self.camera_y
 
+            
+            # Adjust and draw the NPCs
+            for npc in self.npcs:
+                npc.sprite.x -= self.camera_x
+                npc.sprite.y -= self.camera_y
+                npc.draw()
+                npc.sprite.x += self.camera_x
+                npc.sprite.y += self.camera_y
+
             # Draw dynamic lighting if enabled
             if self.dynamic_lighting_enabled:
                 self.draw_dynamic_lighting()
+
 
     # Game input handlers
     # Keyboard pressed handlers

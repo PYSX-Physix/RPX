@@ -12,6 +12,7 @@ class LoadingSceneBase:
         self.non_collidable_assets = []
         self.light_sources = []
         self.enemies = []
+        self.npcs = []
         self.background_image = None
         self.sounds = []
         self.background_bounds = None
@@ -75,5 +76,6 @@ class LoadingSceneBase:
             dynamic_lighting=self.game.dynamic_lighting,
             enemies=self.enemies,
             background_image=self.background_image,  # Pass the background image to the game scene
+            npcs=self.npcs,
         )
         self.game.switch_scene(game_scene)
