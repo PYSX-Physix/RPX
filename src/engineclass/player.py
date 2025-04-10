@@ -11,6 +11,7 @@ class Player:
         :param scale: Scaling factor for the player.
         :param show_hitbox: Whether to show the debug hitbox.
         """
+        can_move= bool
         # Load player animations
         self.animations = {
             "idle_right": pyglet.image.load_animation(f"{character_path}/dev_default/idle-right.gif"),
@@ -35,6 +36,12 @@ class Player:
             color=(255, 0, 0),  # Red color for the hitbox
             batch=None  # No batch, drawn individually
         )
+
+    def is_near_npc(self, npc, radius=100):
+        dx = self.sprite.x - npc.sprite.x
+        dy = self.sprite.y - npc.sprite.y
+        distance_squared = dx*dx+dy*dy
+        return distance_squared <= radius * radius
 
     def clamp_to_bounds(self, bounds):
         self.sprite.x = max(bounds["x_min"], min(self.sprite.x, bounds["x_max"] - self.width))

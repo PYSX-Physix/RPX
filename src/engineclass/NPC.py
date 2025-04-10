@@ -4,38 +4,54 @@ import random
 
 class NPC:
     def __init__(self, name, image_path, x, y, dialogue_file=None):
-        self.load_animation(image_path, x, y)
         self.name = name
         self.dialogue_chain = []
         self.dialogue_index = 0
         self.active = True
+        self.sprite = None
+
+        self.load_animation(image_path, x, y)
         self.load_dialogue(dialogue_file)
 
-    def load_animation(self, image_path, x: int = 0, y: int = 0):
-        """
-        Load the image as either a static image or an animation (GIF).
-        """
-        if image_path:
-            try:
-                # Try to load the image as an animation (GIF)
-                image = pyglet.image.load_animation(image_path)
-                print(f"Log: Loaded animation: {image_path}")
-            except Exception:
-                # If it fails, load it as a static image
-                image = pyglet.image.load(image_path)
-                print(f"Log: Loaded static image: {image_path}")
+    def start_dialog(self, npc):
+        if npc.dialogue_chain:
+            prompt, options = npc.get_dialogue()
+            self.current_dialog_npc = npc
+            print(f"Current dialogue npc: {self.current_dialog_npc.name}")
+            self.dialog_ui_visible = True
+            self.dialog_prompt = pyglet.text.Label(
+                prompt,
+                x=50, y=100,
+                width=1180,
+                multiline=True,
+                font_size=16,
+                color=(255, 255, 255, 255))
 
-            # Create a sprite for the image or animation
-            self.sprite = pyglet.sprite.Sprite(image, x=x, y=y)
-            self.sprite.scale = 1.0
+            self.dialog_options = []
+            for i, option in enumerate(options):
+                label = pyglet.text.Label(
+                    f"{i+1}. {option['text']}",
+                    x=50, y=70 - i * 30,
+                    font_size=14,
+                    color=(200, 200, 200, 255))
+                self.dialog_options.append(label)
         else:
-            print("Log: No image provided for NPC.")
-            self.sprite = None
+            print("No dialogue available for this NPC.")
+
+
+
+    def load_animation(self, image_path, x=0, y=0):
+        try:
+            image = pyglet.image.load_animation(image_path)
+            print(f"Log: Loaded animation: {image_path}")
+        except Exception:
+            image = pyglet.image.load(image_path)
+            print(f"Log: Loaded static image: {image_path}")
+
+        self.sprite = pyglet.sprite.Sprite(image, x=x, y=y)
+        self.sprite.scale = 1.0
 
     def load_dialogue(self, dialogue_file):
-        """
-        Load dialogue from a JSON file.
-        """
         if dialogue_file:
             try:
                 with open(dialogue_file, 'r') as f:
@@ -51,51 +67,43 @@ class NPC:
             print("No dialogue file provided.")
 
     def add_dialogue(self, prompt, options):
-        """
-        Adds dialogue options to the dialogue chain.
-        """
         formatted_options = []
         for opt in options:
             formatted_options.append({
                 "text": opt["text"],
-                "response": f"{self.name}: {opt['response']}",
-                "condition": opt.get("condition", lambda: True)  # Default condition always true
+                "response": opt["response"],
+                "condition": opt.get("condition", None)  # Expecting string like "has_item_potion"
             })
-        self.dialogue_chain.append((f"{self.name}: {prompt}", formatted_options))
+        self.dialogue_chain.append((prompt, formatted_options))
 
-    def condition_checker(self, condition):
-        """
-        Simulate checking conditions. This can be expanded for inventory, quest flags, etc.
-        """
+    def condition_checker(self, condition_key):
+        if not condition_key:
+            return True
         conditions = {
-            "has_item_potion": True,  # Simulating the player having a potion
-            "has_item_sword": False,   # Simulating the player not having a sword
-            # Add more conditions based on your game logic
+            "has_item_potion": True,
+            "has_item_sword": False,
         }
-        return conditions.get(condition, False)
+        return conditions.get(condition_key, False)
 
     def get_dialogue(self):
-        """
-        Get the current dialogue and available options based on conditions.
-        """
         if self.dialogue_index >= len(self.dialogue_chain):
             return None
         prompt, options = self.dialogue_chain[self.dialogue_index]
-        available_options = [opt for opt in options if self.condition_checker(opt["condition"]())]
-        return prompt, available_options
+        available_options = [
+            {
+                "text": opt["text"],
+                "response": f"{self.name}: {opt['response']}"
+            }
+            for opt in options if self.condition_checker(opt.get("condition"))
+        ]
+        return f"{self.name}: {prompt}", available_options
 
     def advance_dialogue(self):
-        """
-        Move to the next dialogue in the chain.
-        """
         self.dialogue_index += 1
         if self.dialogue_index >= len(self.dialogue_chain):
             self.active = False
 
     def draw(self):
-        """
-        Draw the NPC sprite.
-        """
         if self.sprite:
             self.sprite.draw()
 

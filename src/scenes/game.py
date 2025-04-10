@@ -5,7 +5,7 @@ from engineclass.player import Player
 from engineclass.DynamicLightingObject import DynamicLightingManager
 from utils.helpers import imagepath
 
-
+# Possibly make this an engine class so the code can be used in different scenes yet it stays the same.
 class GameScene:
     def __init__(self, game, player, collidable_assets, non_collidable_assets, light_sources, enemies, dynamic_lighting, background_image, npcs):
         self.game = game
@@ -55,11 +55,9 @@ class GameScene:
         self.camera_x = 0
         self.camera_y = 0
 
-    
-
 
     def initialize_controller(self):
-        """Initialize the game controller."""
+        """Initialize the game controller. (EXPERIMENTAL)"""
         input_controller = self.controller_manager.get_controllers()
         if input_controller:
             self.controller = input_controller[0]
@@ -145,6 +143,7 @@ class GameScene:
         # Draw the NPCs
         for npc in self.npcs:
             npc.draw()
+
 
     def draw_dynamic_lighting(self):
         """Draw dynamic lighting effects."""
@@ -254,6 +253,9 @@ class GameScene:
                 self.keys["up"] = True
             elif symbol == pyglet.window.key.S:
                 self.keys["down"] = True
+                
+            
+
 
     def on_key_release(self, symbol, modifiers):
         if not self.paused:  # Only handle key releases if the game is not paused
@@ -284,6 +286,7 @@ class GameScene:
                     and button_shape.y <= y <= button_shape.y + button_shape.height
                 ):
                     button_data["action"]()  # Call the button's action
+
     
     # Controller joystick handler (Part is still experimental)
     def on_joyaxis_motion(self, controller, stick, value: Vec2):
@@ -445,6 +448,16 @@ class GameScene:
         # Clamp the camera to the background boundaries
         self.camera_x = max(0, min(self.camera_x, self.background_image.width - screen_width))
         self.camera_y = max(0, min(self.camera_y, self.background_image.height - screen_height))
+
+    def update_dialogue(self):
+        prompt, options = self.npc.get_dialogue() or (None, [])
+        if prompt:
+            self.ui_dialog_text.text = prompt
+            self.ui_dialog_text.visible = True
+            self.ui_dialog_box.visible = True
+        else:
+            self.ui_dialog_text.visible = False
+            self.ui_dialog_box.visible = False
 
     def resume_game(self):
         self.paused = False  # Resume the game
