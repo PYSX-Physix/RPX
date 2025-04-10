@@ -91,7 +91,7 @@ class GameScene:
             button_x = self.game.window.width // 2 - button_width // 2
             button_y = start_y - i * (button_height + button_spacing)
             button_shape = pyglet.shapes.Rectangle(
-                button_x, button_y, button_width, button_height, color=(50, 50, 200)
+                button_x, button_y, button_width, button_height, color=(50, 50, 50)
             )
             self.pause_menu_shapes.append(button_shape)
 

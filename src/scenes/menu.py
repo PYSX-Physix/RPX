@@ -37,7 +37,7 @@ class MenuScene:
         for button in self.buttons:
             # Create button background
             button_shape = pyglet.shapes.Rectangle(
-                x=button["x"] - 100, y=button["y"] - 20, width=200, height=40, color=(50, 50, 200)
+                x=button["x"] - 100, y=button["y"] - 20, width=200, height=40, color=(50, 50, 50)
             )
             self.button_shapes.append(button_shape)
 
